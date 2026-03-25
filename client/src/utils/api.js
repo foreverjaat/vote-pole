@@ -32,7 +32,10 @@ export const toggleElectionAPI    = (id)      => API.patch(`/elections/${id}/tog
 export const getElectionStatsAPI  = (id)      => API.get(`/elections/${id}/stats`);
 
 // ── Candidates ────────────────────────────────────────────────
-export const getCandidatesAPI   = (electionId) => API.get(`/candidates/${electionId}`);
+//export const getCandidatesAPI   = (electionId) => API.get(`/candidates/${electionId}`);
+// after solve error in candidate api
+export const getCandidatesAPI = (electionId) => 
+  API.get(`/candidates?electionId=${electionId}`);
 export const addCandidateAPI    = (formData)   =>
   API.post('/candidates', formData, {
     headers: { 'Content-Type': 'multipart/form-data' },
