@@ -70,7 +70,7 @@ export const createCandidate = catchAsync(async (req, res) => {
   });
 });
 
-/* GET all candidates for an election */
+/* GET all candidates for an election *
 export const getCandidatesByElection = catchAsync(async (req, res) => {
   const candidates = await Candidate.find({ election: req.params.electionId })
     .sort({ role: 1, voteCount: -1 });
@@ -80,7 +80,26 @@ export const getCandidatesByElection = catchAsync(async (req, res) => {
     results: candidates.length,
     data: { candidates },
   });
+});*/
+
+// after fixeing candidate 
+export const getCandidatesByElection = catchAsync(async (req, res) => {
+  const { electionId } = req.query;
+
+  if (!electionId) {
+    throw new AppError('Election ID is required', 400);
+  }
+
+  const candidates = await Candidate.find({ election: electionId })
+    .sort({ role: 1, voteCount: -1 });
+
+  res.status(200).json({
+    status: 'success',
+    results: candidates.length,
+    data: { candidates },
+  });
 });
+
 
 /* UPDATE */
 export const updateCandidate = catchAsync(async (req, res) => {
