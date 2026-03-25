@@ -9,7 +9,9 @@ const router = express.Router();
 
 router.use(protect);
 
-router.get('/:electionId', validateMongoId('electionId'), validate, getCandidatesByElection);
+//router.get('/:electionId', validateMongoId('electionId'), validate, getCandidatesByElection);
+//  FIXED
+router.get('/', getCandidatesByElection);
 router.post('/',           adminOnly, createCandidate);
 router.put('/:id',         adminOnly, validateMongoId('id'), validate, updateCandidate);
 router.delete('/:id',      adminOnly, validateMongoId('id'), validate, deleteCandidate);
