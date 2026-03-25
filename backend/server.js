@@ -51,7 +51,7 @@ const startServer = async () => {
 
   const io = new Server(httpServer, {
     cors: {
-      origin: process.env.CLIENT_URL,
+      origin: `https://vote-pole-1.onrender.com`,
       methods: ['GET', 'POST'],
     },
     pingTimeout: 60000,
