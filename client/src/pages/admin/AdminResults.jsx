@@ -6,7 +6,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import { getElectionAPI, getResultsAPI } from '../../utils/api';
 import Spinner from '../../components/shared/Spinner';
 
-const SOCKET_URL =  'http://localhost:8080';
+const SOCKET_URL =  'https://vote-pole.onrender.com';
 const COLORS     = ['#4f46e5','#7c3aed','#059669','#d97706','#dc2626','#0891b2'];
 const MEDALS     = ['🥇','🥈','🥉'];
 
