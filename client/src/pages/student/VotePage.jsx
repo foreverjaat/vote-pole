@@ -41,7 +41,7 @@ export default function VotePage() {
     setCheckingVotes(false);
     return votedMap;
   }, [electionId]);
-
+/*  previous version
   const loadData = useCallback(async () => {
     setLoading(true);
     try {
@@ -50,6 +50,7 @@ export default function VotePage() {
         getCandidatesAPI(electionId),
       ]);
       const el    = elRes.data.data.election;
+      
       const cands = candRes.data.data.candidates;
       setElection(el);
       setCandidates(cands);
@@ -62,6 +63,34 @@ export default function VotePage() {
     } finally {
       setLoading(false);
     }
+  }, [electionId, navigate, refreshVotedStatus]); */
+  // new version
+const loadData = useCallback(async () => {
+    setLoading(true);
+    try {
+      const [elRes, candRes] = await Promise.all([
+        getElectionAPI(electionId),
+        getCandidatesAPI(electionId),
+      ]);
+
+      const el = elRes.data.data.election;
+
+      //  FIXED LINE (MAIN BUG)
+      const cands = candRes.data?.data || [];
+
+      console.log("Candidates API:", candRes.data);
+
+      setElection(el);
+      setCandidates(cands);
+
+      await refreshVotedStatus(el.roles);
+    } catch (err) {
+      console.error('loadData error:', err);
+      toast.error('Failed to load election data.');
+      navigate('/dashboard');
+    } finally {
+      setLoading(false);
+      }
   }, [electionId, navigate, refreshVotedStatus]);
 
   useEffect(() => { loadData(); }, [loadData]);
