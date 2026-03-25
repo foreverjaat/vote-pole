@@ -46,14 +46,6 @@ export const updateCandidateAPI = (id, fd)     =>
   });
 export const deleteCandidateAPI = (id)         => API.delete(`/candidates/${id}`);
 
-// ── Votes ─────────────────────────────────────────────────────
-
-API.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token');
-  if (token) config.headers.Authorization = `Bearer ${token}`;
-  return config;
-});
-
 //  FIXED (NO ROLE SENT)
 export const castVoteAPI = (data) =>
   API.post('/votes', data);
