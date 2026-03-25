@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 
 const AuthContext = createContext();
-const BASE = 'http://localhost:8080/api/v1';
+const BASE = 'https://vote-pole.onrender.com/api/v1';
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser]     = useState(null);
