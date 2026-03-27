@@ -116,7 +116,7 @@ function ElectionCard({ election }) {
   const { cls, label } = statusMap[election.status] || statusMap.inactive;
 
   return (
-      /*
+      
     <div className="card">
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 12 }}>
         <span className={`badge ${cls}`}>
@@ -148,67 +148,6 @@ function ElectionCard({ election }) {
         )}
       </div>
     </div>
-    */
-     <div
-    className="card">
-      {/* Top */}
-      <div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 12 }}>
-          <span className={`badge ${cls}`}>
-            {election.status === 'live' && <span className="live-dot" />} {label}
-          </span>
-          <span style={{ fontSize: 12, color: 'var(--text3)' }}>
-            {election.roles?.length} role(s)
-          </span>
-        </div>
-
-        <h3 style={{ fontSize: 16, marginBottom: 4 }}>{election.title}</h3>
-
-        {election.description && (
-          <p style={{ fontSize: 13, color: 'var(--text2)', marginBottom: 10 }}>
-            {election.description}
-          </p>
-        )}
-
-        <p style={{ fontSize: 12, color: 'var(--text3)', marginBottom: 10 }}>
-          📅 {fmt(election.startDate)} → {fmt(election.endDate)}
-        </p>
-
-        {/* Roles */}
-        <div
-          style={{
-            display: 'flex',
-            gap: 6,
-            flexWrap: 'wrap',
-            marginBottom: 14,
-            minHeight: 40   // 🔥 keeps equal spacing
-          }}
-        >
-          {election.roles?.map(r => (
-            <span key={r.name} className="role-chip">{r.name}</span>
-          ))}
-        </div>
-      </div>
-
-      {/* Bottom (buttons always aligned) */}
-      <div style={{ marginTop: 'auto', display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-        {election.status === 'live' && (
-          <Link to={`/vote/${election._id}`} className="btn btn-primary btn-sm">
-            🗳️ Vote now
-          </Link>
-        )}
-        {(election.status === 'live' || election.status === 'ended') && (
-          <Link to={`/results/${election._id}`} className="btn btn-secondary btn-sm">
-            📊 Results
-          </Link>
-        )}
-        {election.status === 'upcoming' && (
-          <span style={{ fontSize: 13, color: 'var(--text2)', padding: '5px 0' }}>
-            Opens {fmt(election.startDate)}
-          </span>
-        )}
-      </div>
-  </div>
   );
 }
 
