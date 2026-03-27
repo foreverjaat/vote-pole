@@ -150,13 +150,7 @@ function ElectionCard({ election }) {
     </div>
     */
      <div
-    className="card"
-    style={{
-      display: 'flex',
-      flexDirection: 'column',
-      height: '100%'   // 🔥 makes all cards equal
-    }}
-  >
+    className="card">
       {/* Top */}
       <div>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 12 }}>
