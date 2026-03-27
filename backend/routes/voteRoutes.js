@@ -13,10 +13,10 @@ import { validate } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
-// 🔒 Protect all routes
+
 router.use(protect);
 
-// 🚫 Disable cache middleware (IMPORTANT FIX)
+// Disable cache middleware 
 const noCache = (req, res, next) => {
   res.set({
     'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
@@ -30,7 +30,7 @@ const noCache = (req, res, next) => {
 // ── CAST VOTE ────────────────────────────────────────────────
 router.post(
   '/',
-  noCache,                // 🔥 prevent caching
+  noCache,                
   validateCastVote,
   validate,
   castVote
@@ -48,7 +48,7 @@ router.get(
 // ── CHECK IF USER VOTED ──────────────────────────────────────
 router.get(
   '/check',
-  noCache,                // 🔥 CRITICAL FIX (prevents 304 cache issue)
+  noCache,                
   hasVoted
 );
 
