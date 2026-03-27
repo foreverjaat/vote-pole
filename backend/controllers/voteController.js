@@ -16,7 +16,7 @@ export const castVote = catchAsync(async (req, res) => {
   const normalizedRole = role?.trim();
   if (!normalizedRole) throw new AppError('role is required.', 400);
 
-  // 1 — Election checks
+  //  Election checks
   const election = await Election.findById(electionId);
   if (!election) throw new AppError('Election not found.', 404);
 
@@ -25,7 +25,7 @@ export const castVote = catchAsync(async (req, res) => {
   if (now < election.startDate) throw new AppError('Voting has not started yet.', 400);
   if (now > election.endDate)   throw new AppError('Voting has ended.', 400);
 
-  // 2 — Validate role belongs to this election (case-insensitive check)
+  // Validate role belongs to this election (case-insensitive check)
   const electionRole = election.roles.find(
     r => r.name.toLowerCase() === normalizedRole.toLowerCase()
   );
@@ -38,7 +38,7 @@ export const castVote = catchAsync(async (req, res) => {
   // Use the canonical role name stored in the election (correct casing)
   const canonicalRole = electionRole.name;
 
-  // 3 — Candidate checks
+  //  Candidate checks
   const candidate = await Candidate.findById(candidateId);
   if (!candidate) throw new AppError('Candidate not found.', 404);
   if (candidate.election.toString() !== electionId)
@@ -52,7 +52,7 @@ export const castVote = catchAsync(async (req, res) => {
     );
   }
 
-  // 4 — Already voted check (use canonical role name for consistent lookup)
+  //  Already voted check (use canonical role name for consistent lookup)
   const alreadyVoted = await Vote.findOne({
     voter: voterId,
     election: electionId,
@@ -65,7 +65,7 @@ export const castVote = catchAsync(async (req, res) => {
     );
   }
 
-  // 5 — Atomic write in a MongoDB transaction
+  //  Atomic write in a MongoDB transaction
   const session = await mongoose.startSession();
   let updatedCandidate;
   try {
@@ -94,7 +94,7 @@ export const castVote = catchAsync(async (req, res) => {
     session.endSession();
   }
 
-  // 6 — Emit live update via Socket.io (non-critical)
+  // Emit live update via Socket.io (non-critical)
   try {
     const io = getIO();
     io.to(`election:${electionId}`).emit('voteUpdated', {
