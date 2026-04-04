@@ -1,28 +1,21 @@
 
 
-
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
-export default function Navbar() {
+export default function Navbar({ role, setRole }) {
   const { user, logout } = useAuth();
   const location = useLocation();
-  const navigate  = useNavigate();
-
-  // NEW: role toggle (for login page)
-  const [role, setRole] = useState("student");
-
-  //  NEW: theme toggle
-  const [dark, setDark] = useState(false);
+  const navigate = useNavigate();
 
   const isAdmin = user?.role === 'admin';
-  const active  = (path) => location.pathname === path || location.pathname.startsWith(path + '/');
+  const active = (path) => location.pathname === path || location.pathname.startsWith(path + '/');
 
   const adminLinks = [
-    { to: '/admin',             label: 'Dashboard' },
-    { to: '/admin/elections',   label: 'Elections' },
-    { to: '/admin/candidates',  label: 'Candidates' },
+    { to: '/admin',            label: 'Dashboard' },
+    { to: '/admin/elections',  label: 'Elections' },
+    { to: '/admin/candidates', label: 'Candidates' },
   ];
   const studentLinks = [
     { to: '/dashboard', label: 'Dashboard' },
@@ -31,12 +24,11 @@ export default function Navbar() {
   const links = isAdmin ? adminLinks : studentLinks;
 
   const handleLogout = () => { logout(); navigate('/login'); };
-
   const initials = user?.name?.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
 
   return (
     <nav style={{
-      background: dark ? '#111' : '#fff', // NEW
+      background: '#fff',
       borderBottom: '1px solid var(--border)',
       padding: '0 24px',
       height: 60,
@@ -48,89 +40,63 @@ export default function Navbar() {
       zIndex: 100,
       boxShadow: '0 1px 3px rgba(0,0,0,.06)',
     }}>
-      
-      {/*  Logo (changed name) */}
+
       <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none', marginRight: 10 }}>
         <div style={{ width: 32, height: 32, background: 'var(--accent)', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 700, fontSize: 15 }}>V</div>
-        <span style={{ fontWeight: 700, fontSize: 17, color: dark ? '#fff' : 'var(--text)' }}>
-          Vote-Pole
-        </span>
+        <span style={{ fontWeight: 700, fontSize: 17, color: 'var(--text)' }}>Vote-Pole</span>
       </Link>
 
-      {/*  If NOT logged in → show toggle*/ }
-      {!user && (
-        <div style={{ marginLeft: 'auto', display: 'flex', gap: 10 }}>
-          <button
-            onClick={() => setRole("student")}
-            style={{
-              padding: '6px 14px',
-              borderRadius: 8,
-              border: 'none',
-              background: role === "student" ? 'var(--accent)' : '#ddd',
-              color: role === "student" ? '#fff' : '#000',
-              cursor: 'pointer'
-            }}
-          >
-            Student
-          </button>
+      {user && links.map(link => (
+        <Link
+          key={link.to}
+          to={link.to}
+          style={{
+            padding: '6px 14px',
+            borderRadius: 8,
+            textDecoration: 'none',
+            fontSize: 14,
+            fontWeight: 500,
+            color: active(link.to) ? 'var(--accent)' : 'var(--text2)',
+          }}
+        >
+          {link.label}
+        </Link>
+      ))}
 
-          <button
-            onClick={() => setRole("admin")}
-            style={{
-              padding: '6px 14px',
-              borderRadius: 8,
-              border: 'none',
-              background: role === "admin" ? 'var(--accent)' : '#ddd',
-              color: role === "admin" ? '#fff' : '#000',
-              cursor: 'pointer'
-            }}
-          >
-            Admin
-          </button>
+      {/* Right side */}
+      <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 12 }}>
 
-          
-        </div>
-      )}
-
-      {/*  Logged-in UI (UNCHANGED logic) */}
-      {user && (
-        <>
-          {links.map(link => (
-            <Link
-              key={link.to}
-              to={link.to}
-              style={{
-                padding: '6px 14px',
-                borderRadius: 8,
-                textDecoration: 'none',
-                fontSize: 14,
-                fontWeight: 500,
-                transition: 'all .2s',
-                position: 'relative',
-                color: active(link.to) ? 'var(--accent)' : 'var(--text2)',
-              }}
-              className="nav-link"
-            >
-              {link.label}
-            </Link>
-          ))}
-
-          {/* Right side */}
-          <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 12 }}>
-            
-            {/* Dark toggle */}
+        {/* Role toggle — only when NOT logged in */}
+        {!user && (
+          <div style={{ display: 'flex', background: '#f1f1f1', borderRadius: 8, padding: 3, gap: 3 }}>
             <button
-              onClick={() => setDark(!dark)}
+              onClick={() => setRole('student')}
               style={{
-                padding: '6px 10px',
-                borderRadius: 8,
-                border: 'none',
-                cursor: 'pointer'
+                padding: '6px 14px', borderRadius: 6, border: 'none', cursor: 'pointer',
+                background: role === 'student' ? 'var(--accent)' : 'transparent',
+                color: role === 'student' ? '#fff' : 'var(--text2)',
+                fontWeight: 500, fontSize: 13,
               }}
             >
-              {dark ? "☀️" : "🌙"}
+              Student
             </button>
+            <button
+              onClick={() => setRole('admin')}
+              style={{
+                padding: '6px 14px', borderRadius: 6, border: 'none', cursor: 'pointer',
+                background: role === 'admin' ? 'var(--accent)' : 'transparent',
+                color: role === 'admin' ? '#fff' : 'var(--text2)',
+                fontWeight: 500, fontSize: 13,
+              }}
+            >
+              Admin
+            </button>
+          </div>
+        )}
 
+        {/* User info — only when logged in */}
+        {user && (
+          <>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: 13, fontWeight: 700 }}>
                 {initials}
@@ -140,15 +106,10 @@ export default function Navbar() {
                 <div style={{ fontSize: 11, color: 'var(--text3)' }}>{user.enrollmentNumber || user.email}</div>
               </div>
             </div>
-
-            <button onClick={handleLogout} className="btn btn-secondary btn-sm">
-              Log out
-            </button>
-          </div>
-        </>
-      )}
+            <button onClick={handleLogout} className="btn btn-secondary btn-sm">Log out</button>
+          </>
+        )}
+      </div>
     </nav>
   );
 }
-
-
