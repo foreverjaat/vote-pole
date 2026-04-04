@@ -39,7 +39,7 @@ export default function Login({ role }) {
     <div className="auth-page">
       <div className="auth-card">
         <div className="auth-logo">
-          <div className="auth-icon">{role === 'admin' ? 'A' : 'V'}</div>
+          <div className="auth-icon">{role === 'admin' ? 'V' : 'V'}</div>
           <h1 className="auth-title">{role === 'admin' ? 'Admin Login' : 'Welcome back'}</h1>
           <p className="auth-sub">{role === 'admin' ? 'Only Admin Can Login' : 'Sign in to College Voting System'}</p>
         </div>
