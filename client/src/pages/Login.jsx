@@ -41,7 +41,7 @@ export default function Login({ role }) {
         <div className="auth-logo">
           <div className="auth-icon">{role === 'admin' ? 'A' : 'V'}</div>
           <h1 className="auth-title">{role === 'admin' ? 'Admin Login' : 'Welcome back'}</h1>
-          <p className="auth-sub">{role === 'admin' ? 'Sign in as Administrator' : 'Sign in to College Voting System'}</p>
+          <p className="auth-sub">{role === 'admin' ? 'Only Admin Can Login' : 'Sign in to College Voting System'}</p>
         </div>
 
         <form onSubmit={handleSubmit}>
