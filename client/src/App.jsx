@@ -1,4 +1,6 @@
-import React from 'react';
+
+
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -6,8 +8,6 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 
 import Sidebar from './components/shared/Sidebar';
 import Spinner from './components/shared/Spinner';
-
-// for navbar
 import Navbar from './components/shared/Navbar';
 
 import Login from './pages/Login';
@@ -50,19 +50,20 @@ function AppLayout({ children }) {
   );
 }
 
-// NEW ROUTES 
-
+// role based login 
 function AppRoutes() {
+  const [role, setRole] = useState('student');
+
   return (
     <Routes>
       <Route path="/" element={<Navigate to="/login" replace />} />
 
-      {/*  Public Routes WITH Navbar */}
+      {/* Public Routes WITH Navbar */}
       <Route path="/login" element={
         <PublicRoute>
           <>
-            <Navbar />
-            <Login />
+            <Navbar role={role} setRole={setRole} />
+            <Login role={role} />
           </>
         </PublicRoute>
       } />
@@ -70,7 +71,7 @@ function AppRoutes() {
       <Route path="/register" element={
         <PublicRoute>
           <>
-            <Navbar />
+            <Navbar role={role} setRole={setRole} />
             <Register />
           </>
         </PublicRoute>
@@ -79,7 +80,7 @@ function AppRoutes() {
       <Route path="/forgot-password" element={
         <PublicRoute>
           <>
-            <Navbar />
+            <Navbar role={role} setRole={setRole} />
             <ForgotPassword />
           </>
         </PublicRoute>
